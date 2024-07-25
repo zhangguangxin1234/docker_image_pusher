@@ -1,32 +1,34 @@
-FROM python:3.11-slim-bookworm
+FROM rocker/shiny:4.0.1
 
-# add git lhs to apt
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+LABEL maintainer="Ivan Chang iychang@uci.edu"
 
-# Update and install dependencies
+
+#OS level prereq pacakges
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        software-properties-common sudo git-lfs \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+	&& apt-get install -y libxml2 libglpk-dev libxml2-dev\
+	&& rm -rf /var/lib/apt/lists/*
 
-# Setup a non-root user 'autogen' with sudo access
-RUN adduser --disabled-password --gecos '' autogen
-RUN adduser autogen sudo
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-USER autogen
-WORKDIR /home/autogen
+#Install managers
+RUN Rscript -e 'install.packages("devtools")' \
+	&& Rscript -e 'install.packages("BiocManager")'
 
-# Set environment variable if needed
-# ENV OPENAI_API_KEY="{OpenAI-API-Key}"
+#BiocManager prereq installs for CellChat
+RUN Rscript -e 'BiocManager::install("ComplexHeatmap")' \
+	&& Rscript -e 'BiocManager::install("BiocGenerics")' \
+	&& Rscript -e 'BiocManager::install("Biobase")'
 
-# Install Python packages
-RUN pip install --upgrade pip
-RUN pip install pyautogen[teachable,lmm,retrievechat,mathchat,blendsearch] autogenra
-RUN pip install numpy pandas matplotlib seaborn scikit-learn requests urllib3 nltk pillow pytest beautifulsoup4
+#Github prereq installs for CellChat
+RUN Rscript -e 'Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS=TRUE); devtools::install_github("renozao/NMF")' \
+	&& Rscript -e 'devtools::install_github("jokergoo/circlize")'
 
-# Expose port
-EXPOSE 8081
+#CellChat install
+RUN Rscript -e 'devtools::install_github("sqjin/CellChat")'
 
-# Start Command
-CMD ["/bin/bash"]
+#Packages supporting Shiny and graphics
+RUN Rscript -e 'install.packages(c("shinyWidgets", "shinythemes", "ggplot2", "ggalluvial", "shinyjs", "shinycssloaders", "dplyr"))'
+
+RUN rm -Rf /srv/shiny-server/*
+RUN mkdir /srv/shiny-server/Cellchat
+
+COPY ./shiny-server.conf /etc/shiny-server/shiny-server.conf
+COPY ./*.R /srv/shiny-server/Cellchat/
