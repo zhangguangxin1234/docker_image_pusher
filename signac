@@ -14,14 +14,23 @@ RUN apt-get update && apt-get install -y \
 # 创建micromamba环境并安装所需的包
 RUN micromamba create -n bioenv -c conda-forge -c bioconda \
     jupyterlab \
-    seurat=4.11 \
-    seuratobject=4.1.0 \
-    signac=1.8 \
+    r-irkernel \
+    r-seurat=4.11 \
+    r-seuratobject=4.1.0 \
+    r-signac=1.8 \
+    r-genomicranges \
+    r-s4vectors \
+    r-genomeinfodb \
+    r-ggplot2 \
+    r-patchwork \
     python=3.9 \
     && micromamba clean --all --yes
 
 # 设置环境变量
 ENV PATH="/opt/conda/envs/bioenv/bin:$PATH"
+
+# 配置Jupyter以使用R内核
+RUN R -e "IRkernel::installspec(user = FALSE)"
 
 # 启动Jupyter Lab
 CMD ["jupyter-lab", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--LabApp.token=''"]
