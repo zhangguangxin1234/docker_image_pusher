@@ -18,9 +18,9 @@ RUN micromamba create -n bioenv -c conda-forge -c bioconda \
     r-seurat=4.11 \
     r-seuratobject=4.1.0 \
     r-signac=1.8 \
-    r-genomicranges \
+    bioconductor-genomeinfodb \
+    bioconductor-genomicranges \
     r-s4vectors \
-    r-genomeinfodb \
     r-ggplot2 \
     r-patchwork \
     python=3.9 \
