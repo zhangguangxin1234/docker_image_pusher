@@ -63,7 +63,7 @@ USER mambauser
 
 # 创建分析环境并安装核心包
 RUN micromamba create -p /home/mambauser/env/analysis && \
-    micromamba run -p /home/mambauser/env/analysis micromamba install -y \
+    micromamba run -p /home/mambauser/env/analysis micromamba install -v -y \
     python=3.9 \
     r-base=4.1.3 \
     r-essentials \
