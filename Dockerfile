@@ -43,34 +43,18 @@ RUN mkdir -p /etc/pip && \
     echo "timeout = 1000" >> /etc/pip.conf && \
     echo "retries = 10" >> /etc/pip.conf
 
-# 配置全局micromamba源
-RUN mkdir -p /etc/conda && \
-    echo "channels:" > /etc/conda/condarc && \
-    echo "  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/" >> /etc/conda/condarc && \
-    echo "  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/" >> /etc/conda/condarc && \
-    echo "  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r/" >> /etc/conda/condarc && \
-    echo "  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/" >> /etc/conda/condarc && \
-    echo "  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/" >> /etc/conda/condarc && \
-    echo "ssl_verify: false" >> /etc/conda/condarc && \
-    echo "show_channel_urls: true" >> /etc/conda/condarc && \
-    echo "download_threads: 10" >> /etc/conda/condarc && \
-    echo "channel_priority: strict" >> /etc/conda/condarc
-
 # 跳过系统包安装，使用基础镜像自带的工具
 
 # 切换到mambauser用户
 USER mambauser
 
 # 创建分析环境并安装核心包
-RUN micromamba create -p /home/mambauser/env/analysis && \
-    micromamba run -p /home/mambauser/env/analysis micromamba install -v -y \
+RUN micromamba create -p /home/mambauser/env/analysis  -y \
     python=3.9 \
     r-base=4.1.3 \
     r-essentials \
     r-seurat=4.1.1 \
     r-tidyverse=1.3.1 \
-    r-dplyr=1.0.9 \
-    r-ggplot2=3.3.6 \
     r-matrix=1.4.1 \
     r-rcpp=1.0.8.3 \
     r-jsonlite \
