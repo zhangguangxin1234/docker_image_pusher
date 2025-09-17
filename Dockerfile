@@ -68,7 +68,26 @@ RUN micromamba create -p /home/mambauser/env/analysis  -y \
     r-stringr=1.4.0 \
     r-readr=2.1.2 \
     r-tibble=3.1.7 \
-    r-tidyr=1.2.0 
+    r-tidyr=1.2.0 \
+    r-forcats \
+    bioconductor-annotationdbi=1.56.1 \
+    bioconductor-clusterprofiler=4.2.0 \
+    bioconductor-edger=3.36.0 \
+    bioconductor-singler=1.8.1 \
+    bioconductor-genomicranges= \
+    bioconductor-ensdb.hsapiens.v86 \
+    bioconductor-bsgenome.hsapiens.ucsc.hg38 \
+    bioconductor-bsgenome.mmusculus.ucsc.mm10 \
+    r-signac=1.7.0 \
+    r-future=1.26.1 \
+    r-furrr \
+    r-presto=1.0.0 \
+    r-qs \
+    r-magick \
+    r-gridextra=2.3 \
+    r-cowplot=1.1.1 \
+    r-patchwork=1.1.1 \
+    r-promises=1.2.0.1
     
 # 设置默认shell为bash
 ENV SHELL=/bin/bash
