@@ -49,7 +49,7 @@ RUN mkdir -p /etc/pip && \
 USER mambauser
 
 # 创建分析环境并安装核心包
-RUN micromamba create -p /home/mambauser/env/analysis -c bioconda -c r -c conda-forge -c   -y \
+RUN micromamba create -p /home/mambauser/env/analysis -c bioconda -c r -c conda-forge   -y \
     python=3.9 \
     r-base=4.1.3 \
     r-essentials \
