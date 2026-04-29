@@ -2,6 +2,7 @@ FROM codercom/code-server:latest
 
 USER root
 
+
 # 1. 彻底覆盖 apt 源为清华源 (针对 Debian Trixie)
 RUN rm -rf /etc/apt/sources.list.d/* && \
     echo "Types: deb\nURIs: https://mirrors.tuna.tsinghua.edu.cn/debian\nSuites: trixie trixie-updates\nComponents: main\nSigned-By: /usr/share/keyrings/debian-archive-keyring.pgp\n\nTypes: deb\nURIs: https://mirrors.tuna.tsinghua.edu.cn/debian-security\nSuites: trixie-security\nComponents: main\nSigned-By: /usr/share/keyrings/debian-archive-keyring.pgp" > /etc/apt/sources.list.d/debian.sources
